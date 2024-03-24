@@ -1,0 +1,15 @@
+exit
+int
+void
+-----
+__array_init__
+int
+int
+-----
+__array_getitem__
+int,int
+int
+-----
+__array_setitem__
+int,int,int
+void
