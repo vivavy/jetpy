@@ -1,12 +1,10 @@
 # it needed for linter. you can skip this line
-try:
-    jet
-    try:
-        import jet  # definetly ImportError
-        raise RuntimeError("Broken runtime")
-    except ImportError:pass
-except NameError:
-    raise RuntimeError("Not a JETPY runtime")
+# ATTENTION: you MUST leave end of line after `jet` in this line
+#         ~~
+#         |
+#         \
+#         V
+import jet
 
 """# this linese are equals
 intp = jet.array(int, 32)

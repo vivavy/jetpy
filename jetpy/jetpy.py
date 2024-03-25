@@ -2,9 +2,6 @@
 import os, sys, shutil, uuid
 
 
-print(sys.argv)
-
-
 try:shutil.rmtree("src/__pycache__")
 except:pass
 try:shutil.rmtree("../__pycache__")
@@ -29,15 +26,17 @@ action = sys.argv[1]
 
 if action == "debug":
     os.system(sys.executable + " /usr/jetpy/starter.py " + os.getcwd() + " src/main.py")
+    sys.exit()
 
 if action == "run":
     tmpdir = "/tmp/" + uuid.uuid4().hex[2:].replace("-", "")[::2]
     try:os.mkdir(tmpdir)
     except:pass
     shutil.unpack_archive(sys.argv[2], tmpdir, "zip")
-    os.system(sys.executable + " /usr/jetpy/starter.py " + os.getcwd() + " " + tmpdir+"/src/main.py")
+    os.system(sys.executable + " /usr/jetpy/starter.py " + tmpdir + " " + os.getcwd() + " " + tmpdir+"/src/main.py")
     try:shutil.rmtree(tmpdir)
     except:pass
+    sys.exit()
 
 if action == "build":
     tmpdir = "../" + uuid.uuid4().hex[2:].replace("-", "")[::2]
@@ -55,6 +54,7 @@ if action == "build":
     shutil.make_archive("../"+os.getcwd().split("/")[-1]+"", 'zip', tmpdir)
     os.rename("../"+os.getcwd().split("/")[-1]+".zip", "../"+os.getcwd().split("/")[-1]+".jet")
     shutil.rmtree(tmpdir)
+    sys.exit()
 
 try:shutil.rmtree("src/__pycache__")
 except:pass

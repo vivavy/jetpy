@@ -55,7 +55,7 @@ class cfunc:
 
 
 def string(name):
-    with open(path.package("/resources/static/string/"+name+".string"), "rt") as f:
+    with open(__jetpath__+"/resources/static/string/"+name+".string", "rt") as f:
         return f.read()
 
 
@@ -86,7 +86,7 @@ class native:
 
     @staticmethod
     def load(name: str) -> library:
-        cfg = jcfg.load(open(os.path.abspath(path.package("resources/wrapped/" + name + ".jcfg"))))
+        cfg = jcfg.load(open(os.path.abspath(__jetpath__+"resources/wrapped/" + name + ".jcfg")))
         dll = ctypes.CDLL(path.package("resources/native/" + name))
 
         rv = native.library(native.shared(cfg, dll))
@@ -105,6 +105,7 @@ def malloc(size):
 def __init__(jetpath):
     global __jetpath__, __stdlib__, print, input, exit, to_array
     __jetpath__ = jetpath
+    print(jetpath)
     __stdlib__ = native.load("libj" + ("64" if sys.maxsize == 9223372036854775807 else "32") + ".so")
 
     print = builtins.print
