@@ -7,7 +7,20 @@ __jetpath__ = ""
 
 class path:
     def package(path):
-        return __jetpath__+"/"+path
+        return __jetpath__+"/resources/"+path
+    
+    def source(path):
+        return __jetpath__+"/src/"+path
+    
+    def native(path):
+        return __jetpath__+"/resources/native/"+path
+    
+    def wrapped(path):
+        return __jetpath__+"/resources/wrapped/"+path
+    
+    def static(path):
+        return __jetpath__+"/resources/static/"+path
+
     def cwd(path):
         return path
 
@@ -56,7 +69,7 @@ class cfunc:
 
 
 def string(name):
-    with open(path.package("/resources/static/string/"+name+".string"), "rt") as f:
+    with open(path.static("/string/"+name+".string"), "rt") as f:
         return f.read()
 
 
@@ -87,8 +100,8 @@ class native:
 
     @staticmethod
     def load(name: str) -> library:
-        cfg = jcfg.load(open(os.path.abspath(path.package("resources/wrapped/" + name + ".jcfg"))))
-        dll = ctypes.CDLL(path.package("resources/native/" + name))
+        cfg = jcfg.load(open(os.path.abspath(path.wrapped("/" + name + ".jcfg"))))
+        dll = ctypes.CDLL(path.native("/" + name))
 
         rv = native.library(native.shared(cfg, dll))
 
@@ -133,22 +146,22 @@ class DictObject:
 class JsonObject:
     @staticmethod
     def load(name: str) -> DictObject:
-        return DictObject(json.load(open(os.path.abspath(path.package("resources/static/config/" + name + ".json")))))
+        return DictObject(json.load(open(os.path.abspath(path.static("/config/" + name + ".json")))))
     
     @staticmethod
     def save(name: str, data: DictObject):
-        with open(os.path.abspath(path.package("resources/static/config/" + name + ".json")), "wt") as f:
+        with open(os.path.abspath(path.static("/config/" + name + ".json")), "wt") as f:
             f.write(json.dumps(data, indent=4))
     
     @staticmethod
     def load_all():
-        for f in os.listdir(path.package("resources/static/config")):
+        for f in os.listdir(path.static("/config")):
             if f.endswith(".json"):
                 yield f[:-5], JsonObject.load(f[:-5])
     
     @staticmethod
     def save_all(data: dict):
-        for f in os.listdir(path.package("resources/static/config")):
+        for f in os.listdir(path.static("/config")):
             if f.endswith(".json"):
                 JsonObject.save(f[:-5], data[f[:-5]])
 
