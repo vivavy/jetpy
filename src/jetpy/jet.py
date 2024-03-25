@@ -1,6 +1,7 @@
 import ctypes, json, sys, os, io, builtins, numpy
 
 ctypes.c_void = None
+ctypes.Any = object
 
 __jetpath__ = ""
 
@@ -95,6 +96,62 @@ class native:
 
         return rv
 
+class DictObject:
+    def __init__(self, dct):
+        dct = {**dct}
+        for k in dct:
+            if type(dct[k]) == dict:
+                dct[k] = DictObject(dct[k])
+        self.__dict__.update(dct)
+    
+    def __getattribute__(self, __name: builtins.str) -> ctypes.Any:
+        if __name.startswith("__"):
+            return super().__getattribute__(__name)
+        return self.__dict__[__name]
+
+    def __setattr__(self, __name: builtins.str, __value: ctypes.Any) -> None:
+        if __name.startswith("__"):
+            super().__setattr__(__name, __value)
+        else:
+            self.__dict__[__name] = __value
+    
+    def __delattr__(self, __name: builtins.str) -> None:
+        if __name.startswith("__"):
+            super().__delattr__(__name)
+        else:
+            del self.__dict__[__name]
+    
+    def __getitem__(self, __name: builtins.str) -> ctypes.Any:
+        return self.__dict__[__name]
+    
+    def __setitem__(self, __name: builtins.str, __value: ctypes.Any) -> None:
+        self.__dict__[__name] = __value
+    
+    def __delitem__(self, __name: builtins.str) -> None:
+        del self.__dict__[__name]
+
+class JsonObject:
+    @staticmethod
+    def load(name: str) -> DictObject:
+        return DictObject(json.load(open(os.path.abspath(path.package("resources/static/config/" + name + ".json")))))
+    
+    @staticmethod
+    def save(name: str, data: DictObject):
+        with open(os.path.abspath(path.package("resources/static/config/" + name + ".json")), "wt") as f:
+            f.write(json.dumps(data, indent=4))
+    
+    @staticmethod
+    def load_all():
+        for f in os.listdir(path.package("resources/static/config")):
+            if f.endswith(".json"):
+                yield f[:-5], JsonObject.load(f[:-5])
+    
+    @staticmethod
+    def save_all(data: dict):
+        for f in os.listdir(path.package("resources/static/config")):
+            if f.endswith(".json"):
+                JsonObject.save(f[:-5], data[f[:-5]])
+
 def array(tp, size):
     return to_array([tp()]*size, tp)
 
@@ -102,8 +159,17 @@ def malloc(size):
     return to_array([0]*size, numpy.byte)
 
 
+def to_list(dctobj):
+    rv = []
+
+    for k in dctobj.__index__:
+        rv.append(dctobj[k])
+    
+    return rv
+
+
 def __init__(jetpath):
-    global __jetpath__, __stdlib__, print, input, exit, to_array
+    global __jetpath__, __stdlib__, print, input, exit, to_array, config
     __jetpath__ = jetpath
     __stdlib__ = native.load("libj" + ("64" if sys.maxsize == 9223372036854775807 else "32") + ".so")
 
@@ -113,3 +179,6 @@ def __init__(jetpath):
     exit = __stdlib__.exit
 
     to_array = numpy.array
+
+    cfg_keys, cfg_vals = zip(*JsonObject.load_all())
+    config = DictObject({k: v for k, v in zip(cfg_keys, cfg_vals)})

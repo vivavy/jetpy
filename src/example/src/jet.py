@@ -55,7 +55,7 @@ class cfunc:
 
 
 def string(name):
-    with open(__jetpath__+"/resources/static/string/"+name+".string", "rt") as f:
+    with open(path.package("/resources/static/string/"+name+".string"), "rt") as f:
         return f.read()
 
 
@@ -86,7 +86,7 @@ class native:
 
     @staticmethod
     def load(name: str) -> library:
-        cfg = jcfg.load(open(os.path.abspath(__jetpath__+"resources/wrapped/" + name + ".jcfg")))
+        cfg = jcfg.load(open(os.path.abspath(path.package("resources/wrapped/" + name + ".jcfg"))))
         dll = ctypes.CDLL(path.package("resources/native/" + name))
 
         rv = native.library(native.shared(cfg, dll))
@@ -95,6 +95,33 @@ class native:
 
         return rv
 
+class config:
+    @staticmethod
+    def load(name: str) -> json:
+        return json.loads(open(os.path.abspath(path.package("resources/static/config/" + name + ".json"))))
+    
+    @staticmethod
+    def save(name: str, data: json):
+        with open(os.path.abspath(path.package("resources/static/config/" + name + ".json")), "wt") as f:
+            f.write(json.dumps(data, indent=4))
+    
+    @staticmethod
+    def load_all():
+        for f in os.listdir(path.package("resources/static/config")):
+            if f.endswith(".json"):
+                yield f[:-5], config.load(f[:-5])
+    
+    @staticmethod
+    def save_all(data: dict):
+        for f in os.listdir(path.package("resources/static/config")):
+            if f.endswith(".json"):
+                config.save(f[:-5], data[f[:-5]])
+    
+    @staticmethod
+    def init():
+        for f in config.load_all():
+            config.__dict__.update({f[0]: f[1]})
+
 def array(tp, size):
     return to_array([tp()]*size, tp)
 
@@ -102,10 +129,18 @@ def malloc(size):
     return to_array([0]*size, numpy.byte)
 
 
+def to_list(dctobj):
+    rv = []
+
+    for k in dctobj.__index__:
+        rv.append(dctobj[k])
+    
+    return rv
+
+
 def __init__(jetpath):
     global __jetpath__, __stdlib__, print, input, exit, to_array
     __jetpath__ = jetpath
-    print(jetpath)
     __stdlib__ = native.load("libj" + ("64" if sys.maxsize == 9223372036854775807 else "32") + ".so")
 
     print = builtins.print
@@ -114,3 +149,5 @@ def __init__(jetpath):
     exit = __stdlib__.exit
 
     to_array = numpy.array
+
+    config.init()

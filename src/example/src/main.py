@@ -6,24 +6,23 @@
 #         V
 import jet
 
-"""# this linese are equals
-intp = jet.array(int, 32)
-intp = jet.to_array([0]*32, int)
+import pygame as pg
 
-# this line makes maximum of member value x[i] < 256
-intp = jet.malloc(32)
+pg.init()
 
-intp[0] = 2
-intp[1] = 10
+screen = pg.display.set_mode(jet.to_list(jet.config.WindowMain.Size))
 
-jet.print(intp[0], intp[1])
+pg.display.set_caption(jet.string(jet.config.WindowMain.Title))
 
-jet.print("Hello, World!")
+running = True
 
-jet.print(jet.input("lol> "))
+while running:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
+    screen.fill((0, 0, 0))
+    pg.display.flip()
 
-jet.exit(32)"""
-
-jet.print(jet.string("message"))
+pg.quit()
 
 jet.exit(0)

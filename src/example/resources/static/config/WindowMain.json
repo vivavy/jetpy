@@ -1,0 +1,8 @@
+{
+    "Title": "WindowTitle",
+    "Size": {
+        "__index__": ["x", "y"],
+        "x": 640,
+        "y": 480
+    }
+}
