@@ -171,7 +171,7 @@ def to_list(dctobj):
 def __init__(jetpath):
     global __jetpath__, __stdlib__, print, input, exit, to_array, config
     __jetpath__ = jetpath
-    __stdlib__ = native.load("libj" + ("64" if sys.maxsize == 9223372036854775807 else "32") + ".so")
+    __stdlib__ = native.load("libj" + ("64" if sys.maxsize == 2 ** 63 - 1 else "32") + ".so")
 
     print = builtins.print
     input = builtins.input
