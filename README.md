@@ -20,7 +20,7 @@ $ jetpy build
 $ jetpy run
 ```
 
-## runni project without build (unstable)
+## run project without build (unstable)
 
 ```sh
 $ jetpy debug
