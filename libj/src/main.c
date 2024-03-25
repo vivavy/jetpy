@@ -7,15 +7,3 @@
 void $exit(int status) {
     exit(status);
 }
-
-int *$__array_init__(int size) {
-    return (int *)malloc(sizeof(int)*size);
-}
-
-int $__array_getitem__(int *self, int index) {
-    return self[index];
-}
-
-void $__array_setitem__(int *self, int index, int value) {
-    self[index] = value;
-}
