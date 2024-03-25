@@ -42,8 +42,8 @@ To add other commands, you need to install [jetpy-dev](https://github.com/vivavy
 │   │   └── string - strings could be saved externally for much easier modding
 │   │       └── title.string - string file for title
 │   ├── wrapped
-│   |   ├── opengl.so.json - json file for wrapped module
-│   │   └── libc.so.json - json file for wrapped module
+│   |   ├── opengl.so.jcfg - jcfg file for wrapped module
+│   │   └── libc.so.jcfg - jcfg file for wrapped module
 │   └── native
 │       ├── opengl.so - native module to be wrapped
 │       └── libc.so - native module to be wrapped
@@ -55,6 +55,8 @@ To add other commands, you need to install [jetpy-dev](https://github.com/vivavy
 ├── requirements.txt - needed for building and jetdistutils
 └── LICENSE - needed for jetdistutils
 ```
+
+Note: all *.py filese will become *.pyc while build process
 
 # License
 
