@@ -1,0 +1,10 @@
+{
+  "name": "JetPy runtime package",
+  "desc": "JETPY package",
+  "priority": -1,
+  "status": "in progress",
+  "terminal": true,
+  "depencies": [
+    "python3"
+  ]
+}
