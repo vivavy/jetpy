@@ -2,6 +2,13 @@ import ctypes, json, sys, os, io, builtins, numpy
 
 ctypes.c_void = None
 
+__jetpath__ = ""
+
+def __init__(jetpath):
+    global __jetpath__
+    __jetpath__ = jetpath
+    print(jetpath)
+
 class jcfg:
     def load(fp: io.TextIOWrapper):
         with fp:
@@ -45,6 +52,11 @@ class cfunc:
         return self.funcptr(*_args)
 
 
+def string(name):
+    with open(__jetpath__+"/resources/static/string/"+name+".string", "rt") as f:
+        return f.read()
+
+
 class native:
     @staticmethod
     class library:
@@ -72,8 +84,8 @@ class native:
 
     @staticmethod
     def load(name: str) -> library:
-        cfg = jcfg.load(open(os.path.abspath("resources/wrapped/" + name + ".jcfg")))
-        dll = _load(os.path.abspath("resources/native/" + name))
+        cfg = jcfg.load(open(os.path.abspath(__jetpath__+"resources/wrapped/" + name + ".jcfg")))
+        dll = _load(os.path.abspath(__jetpath__+"resources/native/" + name))
 
         rv = native.library(native.shared(cfg, dll))
 

@@ -1,4 +1,7 @@
-import jet, os
+import jet, sys, os
+
+file = sys.argv.pop()
+path = sys.argv.pop()
 
 builtins = {
     "jet": jet,
@@ -12,8 +15,11 @@ builtins = {
 
 globs = {
     "__builtins__": builtins,
-    "__file__": os.path.dirname(__file__)+"/main.py"
+    "__file__": file,
+    "__jetpath__": path
 }
+
+jet.__jetpath__ = path
 
 globs = {
     **globs,
@@ -21,5 +27,5 @@ globs = {
 }
 
 if __name__ == '__main__':
-    with open(os.path.dirname(__file__)+"/main.py", "rt") as f:
+    with open(file, "rt") as f:
         exec(f.read(), builtins, globs)

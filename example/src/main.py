@@ -1,7 +1,14 @@
 # it needed for linter. you can skip this line
-if "jet" not in __dict__: import jet
+try:
+    jet
+    try:
+        import jet  # definetly ImportError
+        raise RuntimeError("Broken runtime")
+    except ImportError:pass
+except NameError:
+    raise RuntimeError("Not a JETPY runtime")
 
-# this linese are equals
+"""# this linese are equals
 intp = jet.array(int, 32)
 intp = jet.to_array([0]*32, int)
 
@@ -17,4 +24,8 @@ jet.print("Hello, World!")
 
 jet.print(jet.input("lol> "))
 
-jet.exit(32)
+jet.exit(32)"""
+
+jet.print(jet.string("message"))
+
+jet.exit(0)
