@@ -8,28 +8,26 @@ Jetpy is a Python precompiler for convient distributing.
 $ jetpy init
 ```
 
-## building project
+## build project
 
 ```sh
 $ jetpy build
 ```
 
-## running project
+## run *.jet file
 
 ```sh
 $ jetpy run
 ```
 
-## running project with debug
+## runni project without build (unstable)
 
 ```sh
-$ jetpy run --debug
+$ jetpy debug
 ```
 
-## pacakging details
-
-by default, jetpy has only command `run`.
-To add other commands, you need to install [jetpy-dev](https://github.com/vivavy/jetpy-dev) package.
+Note: when you run `debug`, package is read-write, but when you run `run` package is read-only
+and all changes in package will be reset.
 
 # Project structure
 
@@ -56,7 +54,7 @@ To add other commands, you need to install [jetpy-dev](https://github.com/vivavy
 └── LICENSE - needed for jetdistutils
 ```
 
-Note: all *.py filese will become *.pyc while build process
+Note: all *.py files will become *.pyc while build process
 
 # License
 
@@ -72,7 +70,7 @@ Copyright (c) 2018 Ivan Chetchasov
 
 # See also
 
-[ntw3](https://github.com/vivavy/ntweb)
+[ntw3](https://github.com/vivavy/ntw3)
 
 [honey](https://github.com/vivavy/honey)
 
