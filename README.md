@@ -56,6 +56,8 @@ and all changes in package will be reset.
 
 Note: all *.py files will become *.pyc while build process
 
+Warning: only POSIX systems are supported
+
 # License
 
 MPL 2.0
