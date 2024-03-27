@@ -4,6 +4,11 @@ file = sys.argv.pop()
 path = sys.argv.pop()
 jetp = sys.argv.pop()
 
+if "--mswin" in sys.argv:
+    mswin = True
+else:
+    mswin = False
+
 os.chdir(path)
 
 builtins = {
@@ -22,8 +27,10 @@ globs = {
     "__jetpath__": jetp
 }
 
-# jet.__systemclass__.__jetpath__ = jetp
-jet.__init__(jetp)
+if mswin:
+    globs["__mswin__"] = True
+
+jet.__init__(jetp, mswin)
 
 globs = {
     **globs,

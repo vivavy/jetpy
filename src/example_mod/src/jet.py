@@ -196,9 +196,8 @@ def to_list(dctobj):
     return rv
 
 
-def __init__(jetpath, mswin = False):
-    global __jetpath__, __stdlib__, print, input, exit, to_array, config, mod, __mswin__
-    __mswin__ = mswin
+def __init__(jetpath):
+    global __jetpath__, __stdlib__, print, input, exit, to_array, config
     __jetpath__ = jetpath
     __stdlib__ = native.load("libj" + ("64" if sys.maxsize == 2 ** 63 - 1 else "32") + ".so")
 
@@ -206,8 +205,6 @@ def __init__(jetpath, mswin = False):
     input = builtins.input
 
     exit = __stdlib__.exit
-
-    mod = Codemgr()
 
     to_array = numpy.array
 
